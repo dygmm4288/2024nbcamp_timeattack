@@ -28,6 +28,7 @@ export default function Input({
         placeholder={placeholder}
         onChange={handleChange}
         value={value}
+        required
       />
       <p>{errorMessage}</p>
     </div>
