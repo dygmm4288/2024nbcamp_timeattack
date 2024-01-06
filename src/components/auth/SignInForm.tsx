@@ -34,7 +34,7 @@ export default function SignInForm() {
       if (res.success) {
         // TODO : 로그인 성공 시 처리 로직 구현해야 함
         const { accessToken, avatar, nickname, userId } = res;
-        console.log("로그인 성공!");
+        console.log("로그인 성공!", { accessToken, avatar, nickname, userId });
         dispatch(
           setAuthState({
             accessToken,
@@ -63,6 +63,7 @@ export default function SignInForm() {
       />
       <Input
         id='password'
+        type='password'
         label='비밀번호'
         placeholder='비밀번호를 입력해주세요'
         value={password}
