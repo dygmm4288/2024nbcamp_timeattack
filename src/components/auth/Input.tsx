@@ -5,7 +5,7 @@ interface Props {
   placeholder: string;
   id: string;
   value: string;
-  errorMessage?: string;
+  errorMessage: string | null;
   type?: string;
   handleChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }

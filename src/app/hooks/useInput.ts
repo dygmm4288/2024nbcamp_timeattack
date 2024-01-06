@@ -4,8 +4,13 @@ type InputState = {
   value: string;
   error: null | string;
 };
+type UseInputReturnType = [
+  InputState,
+  (e: ChangeEvent<HTMLInputElement>) => void,
+  (errorMessage: string) => void,
+];
 
-export default function useInput(initialValue: string) {
+export default function useInput(initialValue: string): UseInputReturnType {
   const [value, setValue] = useState<InputState>({
     value: initialValue,
     error: null,
