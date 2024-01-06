@@ -69,7 +69,10 @@ export default function SignUpForm() {
       } catch (error) {
         const err = error as AxiosError;
         const { data } = err.response as { data: { message: string } };
-        if (data.message === "이미 존재하는 이메일입니다.") {
+        if (
+          data.message === "이미 존재하는 이메일입니다." ||
+          data.message === "이미 존재하는 유저 id입니다."
+        ) {
           setEmailError(data.message);
         }
       }
