@@ -1,6 +1,7 @@
 "use client";
 
 import useInput from "@/app/hooks/useInput";
+import { useEffect } from "react";
 import Input from "./Input";
 
 const staticRenderData = [
@@ -22,8 +23,11 @@ const staticRenderData = [
 
 export default function SignUpForm() {
   const inputsValue = useInput();
+  // TODO : value 초기화 작업 해야 함
+  useEffect(() => {}, []);
+  const handleSubmit = async () => {};
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       {staticRenderData.map((data, index) => (
         <Input key={data.id} {...data} {...inputsValue[index]} />
       ))}

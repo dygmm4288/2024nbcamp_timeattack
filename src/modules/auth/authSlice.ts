@@ -23,6 +23,9 @@ const authSlice = createSlice({
     setPasswordConfirm(state, action: PayloadAction<string>) {
       state.passwordConfirm = action.payload;
     },
+    setInitState(state) {
+      state = { ...initialState };
+    },
   },
 });
 export const { setEmail, setNickname, setPassword, setPasswordConfirm } =
