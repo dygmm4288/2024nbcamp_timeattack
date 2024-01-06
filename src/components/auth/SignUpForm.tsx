@@ -1,7 +1,13 @@
 "use client";
 
-import useInput from "@/app/hooks/useInput";
-import { useEffect } from "react";
+import {
+  setEmail,
+  setNickname,
+  setPassword,
+  setPasswordConfirm,
+} from "@/modules/auth/authSlice";
+import { useAppDispatch, useAppSelector } from "@/modules/hooks/hook";
+import { ChangeEvent, useEffect } from "react";
 import Input from "./Input";
 
 const staticRenderData = [
@@ -22,10 +28,25 @@ const staticRenderData = [
 ];
 
 export default function SignUpForm() {
-  const inputsValue = useInput();
+  const { nickname, email, password, passwordConfirm } = useAppSelector(
+    (state) => state.auth,
+  );
+  const dispatch = useAppDispatch();
+  const setters = [setNickname, setEmail, setPassword, setPasswordConfirm];
+  const values = [nickname, email, password, passwordConfirm];
+
+  const handleChange =
+    (setter: Function) => (e: ChangeEvent<HTMLInputElement>) => {
+      dispatch(setter(e.target.value));
+    };
   // TODO : value 초기화 작업 해야 함
   useEffect(() => {}, []);
   const handleSubmit = async () => {};
+
+  const inputsValue = values.map((value, index) => ({
+    value,
+    handleChange: handleChange(setters[index]),
+  }));
   return (
     <form onSubmit={handleSubmit}>
       {staticRenderData.map((data, index) => (
