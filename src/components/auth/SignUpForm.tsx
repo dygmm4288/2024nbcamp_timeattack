@@ -1,6 +1,7 @@
 "use client";
 
 import { register } from "@/app/api/route";
+import useAuth from "@/app/hooks/useAuth";
 import useInput from "@/app/hooks/useInput";
 import {
   ERROR_MESSAGE,
@@ -11,7 +12,7 @@ import {
 } from "@/lib/valid";
 import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
-import { FormEvent } from "react";
+import { FormEvent, useEffect } from "react";
 import Input from "./Input";
 
 export default function SignUpForm() {
@@ -23,8 +24,12 @@ export default function SignUpForm() {
     handleChangePasswordConfirm,
     setPasswordConfirmError,
   ] = useInput("");
+  const { isLogin } = useAuth();
 
   const router = useRouter();
+  useEffect(() => {
+    if (isLogin) router.push("/signin");
+  }, []);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
