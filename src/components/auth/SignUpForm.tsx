@@ -1,7 +1,6 @@
 "use client";
 
 import { register } from "@/app/api/route";
-import useAuth from "@/app/hooks/useAuth";
 import useInput from "@/app/hooks/useInput";
 import {
   ERROR_MESSAGE,
@@ -12,7 +11,7 @@ import {
 } from "@/lib/valid";
 import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
-import { FormEvent, useEffect } from "react";
+import { FormEvent } from "react";
 import Input from "./Input";
 
 export default function SignUpForm() {
@@ -24,12 +23,7 @@ export default function SignUpForm() {
     handleChangePasswordConfirm,
     setPasswordConfirmError,
   ] = useInput("");
-  const { isLogin } = useAuth();
-
   const router = useRouter();
-  useEffect(() => {
-    if (isLogin) router.push("/signin");
-  }, []);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -83,7 +77,9 @@ export default function SignUpForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form
+      onSubmit={handleSubmit}
+      className='border-solid border-b-2 border-b-gray-200 pb-6 mb-4 relative'>
       <Input
         id='nickname'
         label='닉네임'
@@ -119,7 +115,14 @@ export default function SignUpForm() {
         type='password'
       />
 
-      <button type='submit'>다음</button>
+      <button
+        type='submit'
+        className='w-full rounded-md py-4 bg-blue-900 text-white font-bold'>
+        다음
+      </button>
+      <span className='absolute -bottom-3 left-1/2 -translate-x-1/2 block bg-gray-50 text-gray-300 px-4'>
+        또는
+      </span>
     </form>
   );
 }

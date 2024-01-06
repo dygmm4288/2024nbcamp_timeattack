@@ -61,7 +61,9 @@ export default function SignInForm() {
 
   return (
     <>
-      <form onSubmit={handleLogin}>
+      <form
+        className='border-b-2 border-solid pb-4 mb-4 flex flex-col gap-4'
+        onSubmit={handleLogin}>
         <Input
           id='email'
           label='이메일'
@@ -79,8 +81,16 @@ export default function SignInForm() {
           handleChange={handleChangePassword}
           errorMessage={null}
         />
-        <Link href='/signup'>비밀번호를 잊으셨나요?</Link>
-        <button type='submit'>로그인</button>
+        <Link
+          className='block text-right text-md text-blue-900 '
+          href='/signup'>
+          비밀번호를 잊으셨나요?
+        </Link>
+        <button
+          type='submit'
+          className='w-full rounded-md py-4 bg-blue-900 text-white font-bold '>
+          로그인
+        </button>
       </form>
       <ToastContainer />
     </>

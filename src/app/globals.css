@@ -3,4 +3,12 @@
 @tailwind utilities;
 
 body {
+  background-color: rgb(229, 229, 229);
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+body > * {
+  margin: auto;
 }
