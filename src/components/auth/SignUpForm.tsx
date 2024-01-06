@@ -1,91 +1,119 @@
 "use client";
 
 import { register } from "@/app/api/route";
-import { checkValidEmail } from "@/lib/valid";
+import useInput from "@/app/hooks/useInput";
 import {
-  setEmail,
-  setError,
-  setInitError,
-  setNickname,
-  setPassword,
-  setPasswordConfirm,
-} from "@/modules/auth/authSlice";
-import { useAppDispatch, useAppSelector } from "@/modules/hooks/hook";
+  ERROR_MESSAGE,
+  checkValidEmail,
+  checkValidNickname,
+  checkValidPassword,
+  checkValidPasswordConfirm,
+} from "@/lib/valid";
+import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
-import { ChangeEvent, FormEvent, useEffect } from "react";
+import { FormEvent } from "react";
 import Input from "./Input";
 
-const staticRenderData = [
-  { label: "닉네임", placeholder: "닉네임을 입력해주세요", id: "nickname" },
-  { label: "이메일", placeholder: "이메일을 입력해주세요", id: "email" },
-  {
-    label: "비밀번호",
-    placeholder: "비밀번호를 입력해주세요",
-    id: "password",
-    type: "password",
-  },
-  {
-    label: "비밀번호 확인",
-    placeholder: "비밀번호를 다시 입력해주세요",
-    id: "passwordConfirm",
-    type: "password",
-  },
-];
-
 export default function SignUpForm() {
-  const { nickname, email, password, passwordConfirm } = useAppSelector(
-    (state) => state.auth,
-  );
-  const dispatch = useAppDispatch();
-  const setters = [setNickname, setEmail, setPassword, setPasswordConfirm];
-  const values = [nickname, email, password, passwordConfirm];
-  const router = useRouter();
+  const [nickname, handleChangeNickname, setNicknameError] = useInput("");
+  const [email, handleChangeEmail, setEmailError] = useInput("");
+  const [password, handleChangePassword, setPasswordError] = useInput("");
+  const [
+    passwordConfirm,
+    handleChangePasswordConfirm,
+    setPasswordConfirmError,
+  ] = useInput("");
 
-  const handleChange =
-    (setter: Function) => (e: ChangeEvent<HTMLInputElement>) => {
-      dispatch(setter(e.target.value));
-    };
-  // TODO : value 초기화 작업 해야 함
-  useEffect(() => {}, []);
+  const router = useRouter();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setInitError();
-    if (password !== passwordConfirm) {
-      dispatch(
-        setError({ key: "password", value: "비밀번호가 일치하지 않습니다." }),
-      );
-      dispatch(setPassword(""));
-      dispatch(setPasswordConfirm(""));
-      return;
+
+    const isValidPasswordConfirm = checkValidPasswordConfirm(
+      password.value,
+      passwordConfirm.value,
+    );
+    const isValidEmail = checkValidEmail(email.value);
+    const isValidNickname = checkValidNickname(nickname.value);
+    const isValidPassword = checkValidPassword(password.value);
+
+    const isValidForm =
+      isValidPassword &&
+      isValidEmail &&
+      isValidNickname &&
+      isValidPasswordConfirm;
+
+    if (!isValidPassword) {
+      setPasswordError(ERROR_MESSAGE.PASSWORD);
     }
-    if (!checkValidEmail(email)) {
-      dispatch(
-        setError({ key: "email", value: "올바른 이메일 주소를 입력해주세요" }),
-      );
-      dispatch(setEmail(""));
-      return;
+    if (!isValidPasswordConfirm) {
+      setPasswordConfirmError(ERROR_MESSAGE.PASSWORD_CONFIRM);
     }
-    try {
-      const response = await register({ id: email, password, nickname });
-      if (response.success) {
-        router.push("/signin");
-        return;
+    if (!isValidEmail) {
+      setEmailError(ERROR_MESSAGE.EMAIL);
+    }
+    if (!isValidNickname) {
+      setNicknameError(ERROR_MESSAGE.NICKNAME);
+    }
+
+    if (isValidForm) {
+      try {
+        const response = await register({
+          id: email.value,
+          nickname: nickname.value,
+          password: password.value,
+        });
+        if (response.success) {
+          router.push("/signin");
+          return;
+        }
+      } catch (error) {
+        const err = error as AxiosError;
+        const { data } = err.response as { data: { message: string } };
+        if (data.message === "이미 존재하는 이메일입니다.") {
+          setEmailError(data.message);
+        }
       }
-    } catch (err) {
-      // TODO: Error 핸들링 해야 한다.
     }
   };
 
-  const inputsValue = values.map((value, index) => ({
-    value,
-    handleChange: handleChange(setters[index]),
-  }));
   return (
     <form onSubmit={handleSubmit}>
-      {staticRenderData.map((data, index) => (
-        <Input key={data.id} {...data} {...inputsValue[index]} />
-      ))}
+      <Input
+        id='nickname'
+        label='닉네임'
+        placeholder='닉네임을 입력해주세요.'
+        handleChange={handleChangeNickname}
+        value={nickname.value}
+        errorMessage={nickname.error}
+      />
+      <Input
+        id='email'
+        label='이메일'
+        placeholder='이메일 주소를 입력해주세요.'
+        handleChange={handleChangeEmail}
+        value={email.value}
+        errorMessage={email.error}
+      />
+      <Input
+        id='password'
+        label='비밀번호'
+        placeholder='비밀번호를 입력해주세요.'
+        handleChange={handleChangePassword}
+        value={password.value}
+        errorMessage={password.error}
+        type='password'
+      />
+      <Input
+        id='passwordConfirm'
+        label='비밀번호 확인'
+        placeholder='비밀번호를 다시 입력해주세요.'
+        handleChange={handleChangePasswordConfirm}
+        value={passwordConfirm.value}
+        errorMessage={passwordConfirm.error}
+        type='password'
+      />
+
       <button type='submit'>다음</button>
     </form>
   );
