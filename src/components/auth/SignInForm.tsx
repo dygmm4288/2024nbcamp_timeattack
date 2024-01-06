@@ -8,7 +8,6 @@ import { AxiosError } from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent } from "react";
-import { ToastContainer, toast } from "react-toastify";
 import Input from "./Input";
 
 export default function SignInForm() {
@@ -22,7 +21,6 @@ export default function SignInForm() {
     e.preventDefault();
     const isValidEmail = checkValidEmail(email.value);
     if (!isValidEmail) {
-      toast.error("이메일 형식이 올바르지 않습니다.");
       setEmailError("이메일 형식이 올바르지 않습니다.");
       return;
     }
@@ -42,11 +40,8 @@ export default function SignInForm() {
         return;
       }
     } catch (error) {
-      // TODO: 에러 처리 해야 됨
       const err = error as AxiosError;
       const { message } = err.response!.data as { message: string };
-      toast.error(message);
-      console.log(message);
       if (message === "존재하지 않는 유저입니다.") {
         setEmailError(message);
       }
@@ -70,7 +65,7 @@ export default function SignInForm() {
           placeholder='이메일을 입력해주세요'
           value={email.value}
           handleChange={handleChangeEmail}
-          errorMessage={null}
+          errorMessage={email.error}
         />
         <Input
           id='password'
@@ -79,7 +74,7 @@ export default function SignInForm() {
           placeholder='비밀번호를 입력해주세요'
           value={password.value}
           handleChange={handleChangePassword}
-          errorMessage={null}
+          errorMessage={password.error}
         />
         <Link
           className='block text-right text-md text-blue-900 '
@@ -92,7 +87,6 @@ export default function SignInForm() {
           로그인
         </button>
       </form>
-      <ToastContainer />
     </>
   );
 }
