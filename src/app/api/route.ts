@@ -44,7 +44,7 @@ export const login = async ({
   password,
 }: LoginParams): Promise<LoginResponse> => {
   try {
-    const res = await axios.post(path.join(BASE_URL, "/login"), {
+    const res = await axios.post<LoginResponse>(path.join(BASE_URL, "/login"), {
       id,
       password,
     });
@@ -53,3 +53,5 @@ export const login = async ({
     return Promise.reject(err as AxiosError);
   }
 };
+
+export const check = async () => {};
