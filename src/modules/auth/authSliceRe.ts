@@ -23,7 +23,7 @@ const authSlice = createSlice({
       );
       return { ...state, ...action.payload };
     },
-    initializeAuthState(state) {
+    initializeAuthState() {
       const item = JSON.parse(localStorage.getItem("auth") || "null");
       if (!item) {
         return { ...initialState };
