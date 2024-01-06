@@ -1,5 +1,13 @@
+"use client";
+import { login } from "@/app/api/route";
 import Link from "next/link";
-import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
+import {
+  ChangeEvent,
+  Dispatch,
+  FormEvent,
+  SetStateAction,
+  useState,
+} from "react";
 import Input from "./Input";
 
 export default function SignInForm() {
@@ -12,8 +20,24 @@ export default function SignInForm() {
       setter(e.target.value);
     };
 
+  const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    try {
+      const res = await login({ id: email, password });
+      if (res.success) {
+        // TODO : 로그인 성공 시 처리 로직 구현해야 함
+        console.log("로그인 성공!");
+        return;
+      }
+    } catch (err) {
+      // TODO: 에러 처리 해야 됨
+      console.error(err);
+    }
+  };
+
   return (
-    <form>
+    <form onSubmit={handleLogin}>
       <Input
         id='email'
         label='이메일'
