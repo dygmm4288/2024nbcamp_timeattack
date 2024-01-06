@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import path from "path";
 const BASE_URL = "https://moneyfulpublicpolicy.co.kr";
 type RegisterParams = {
@@ -28,14 +28,14 @@ export const register = async ({
   nickname,
 }: RegisterParams): Promise<RegisterResponse> => {
   try {
-    const res = await axios.post(path.join(BASE_URL, "register"), {
+    const res = await axios.post(path.join(BASE_URL, "/register"), {
       id,
       password,
       nickname,
     });
     return res.data;
   } catch (err) {
-    return Promise.reject(err);
+    return Promise.reject(err as AxiosError);
   }
 };
 
