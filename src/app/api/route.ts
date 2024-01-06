@@ -21,6 +21,7 @@ type LoginResponse = {
   avatar: string;
   nickname: string;
 };
+
 export const register = async ({
   id,
   password,
