@@ -1,3 +1,4 @@
+import axios from "axios";
 import path from "path";
 const BASE_URL = "https://moneyfulpublicpolicy.co.kr";
 type RegisterParams = {
@@ -9,17 +10,44 @@ type RegisterResponse = {
   message: string;
   success: boolean;
 };
+type LoginParams = {
+  id: string;
+  password: string;
+};
+type LoginResponse = {
+  accessToken: string;
+  userId: string;
+  success: boolean;
+  avatar: string;
+  nickname: string;
+};
 export const register = async ({
   id,
   password,
   nickname,
 }: RegisterParams): Promise<RegisterResponse> => {
   try {
-    const res = await fetch(path.join(BASE_URL, "register"), {
-      method: "POST",
-      body: JSON.stringify({ id, password, nickname }),
+    const res = await axios.post(path.join(BASE_URL, "register"), {
+      id,
+      password,
+      nickname,
     });
-    return res.json();
+    return res.data;
+  } catch (err) {
+    return Promise.reject(err);
+  }
+};
+
+export const login = async ({
+  id,
+  password,
+}: LoginParams): Promise<LoginResponse> => {
+  try {
+    const res = await axios.post(path.join(BASE_URL, "/login"), {
+      id,
+      password,
+    });
+    return res.data;
   } catch (err) {
     return Promise.reject(err);
   }
