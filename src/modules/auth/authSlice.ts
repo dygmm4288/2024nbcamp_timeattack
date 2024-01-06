@@ -24,7 +24,6 @@ const authSlice = createSlice({
       return { ...state, ...action.payload };
     },
     initializeAuthState() {
-      console.log("call here");
       const item = JSON.parse(localStorage.getItem("auth") || "null");
       if (!item) {
         return { ...initialState };
