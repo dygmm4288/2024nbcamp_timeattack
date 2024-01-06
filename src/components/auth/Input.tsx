@@ -19,7 +19,6 @@ export default function Input({
   handleChange,
 }: Props) {
   return (
-    //TODO : error message일 경우에 빨간색 더 줘야함
     <div className='relative'>
       <label htmlFor={id} className='absolute top-3 left-3 text-xs'>
         {label}

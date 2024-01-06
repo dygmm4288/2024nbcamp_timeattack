@@ -36,7 +36,7 @@ export default function SignInForm() {
             userId,
           }),
         );
-        router.push("/");
+        router.push("/signin");
         return;
       }
     } catch (error) {
