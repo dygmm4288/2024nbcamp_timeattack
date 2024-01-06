@@ -1,4 +1,4 @@
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 const BASE_URL = "https://moneyfulpublicpolicy.co.kr";
 type RegisterParams = {
   id: string;
@@ -33,36 +33,7 @@ const postAxios = async <T, D>(url: string, data: T): Promise<D> => {
 export const register = (data: RegisterParams) =>
   postAxios<RegisterParams, RegisterResponse>("/register", data);
 
-/* export const register = async ({
-  id,
-  password,
-  nickname,
-}: RegisterParams): Promise<RegisterResponse> => {
-  try {
-    const res = await authInstance.post("/register", {
-      id,
-      password,
-      nickname,
-    });
-    return res.data;
-  } catch (err) {
-    return Promise.reject(err as AxiosError);
-  }
-}; */
-
-export const login = async ({
-  id,
-  password,
-}: LoginParams): Promise<LoginResponse> => {
-  try {
-    const res = await authInstance.post<LoginResponse>("/login", {
-      id,
-      password,
-    });
-    return res.data;
-  } catch (err) {
-    return Promise.reject(err as AxiosError);
-  }
-};
+export const login = (data: LoginParams) =>
+  postAxios<LoginParams, LoginResponse>("/login", data);
 
 export const check = async () => {};
