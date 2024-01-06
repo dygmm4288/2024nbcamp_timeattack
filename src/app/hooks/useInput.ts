@@ -6,7 +6,7 @@ type InputState = {
 };
 type UseInputReturnType = [
   InputState,
-  (e: ChangeEvent<HTMLInputElement>) => void,
+  (e: ChangeEvent<HTMLInputElement> | string) => void,
   (errorMessage: string) => void,
 ];
 
@@ -16,7 +16,11 @@ export default function useInput(initialValue: string): UseInputReturnType {
     error: null,
   });
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>|string) => {
+    if(typeof e === 'string'){
+      setValue(() => ({value: e,error:null}));
+      return;
+    }
     setValue(() => ({ value: e.target.value, error: null }));
   };
   const setError = (errorMessage: string) => {

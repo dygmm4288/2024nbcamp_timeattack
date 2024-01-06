@@ -36,6 +36,8 @@ export default function SignInForm() {
             userId,
           }),
         );
+        handleChangeEmail("");
+        handleChangePassword("");
         router.push("/signin");
         return;
       }
