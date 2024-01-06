@@ -34,7 +34,6 @@ export default function SignInForm() {
       if (res.success) {
         // TODO : 로그인 성공 시 처리 로직 구현해야 함
         const { accessToken, avatar, nickname, userId } = res;
-        console.log("로그인 성공!", { accessToken, avatar, nickname, userId });
         dispatch(
           setAuthState({
             accessToken,
