@@ -1,68 +1,39 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 type AuthState = {
+  accessToken: string;
+  userId: string;
+  avatar: string;
   nickname: string;
-  email: string;
-  password: string;
-  passwordConfirm: string;
-  nicknameError: null | string;
-  emailError: null | string;
-  passwordError: null | string;
 };
 
 const initialState: AuthState = {
+  accessToken: "",
+  userId: "",
+  avatar: "",
   nickname: "",
-  email: "",
-  password: "",
-  passwordConfirm: "",
-  nicknameError: null,
-  emailError: null,
-  passwordError: null,
 };
 
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    setNickname(state, action: PayloadAction<string>) {
-      state.nickname = action.payload;
+    setAuthState(state, action: PayloadAction<Partial<AuthState>>) {
+      JSON.stringify(
+        localStorage.setItem("auth", JSON.stringify(action.payload)),
+      );
+      return { ...state, ...action.payload };
     },
-    setEmail(state, action: PayloadAction<string>) {
-      state.email = action.payload;
-    },
-    setPassword(state, action: PayloadAction<string>) {
-      state.password = action.payload;
-    },
-    setPasswordConfirm(state, action: PayloadAction<string>) {
-      state.passwordConfirm = action.payload;
-    },
-    setInitState(state) {
-      state = { ...initialState };
-    },
-    setError(state, action: PayloadAction<{ key: string; value: string }>) {
-      const { key } = action.payload;
-      if (key === "nickname") {
-        state.nicknameError = action.payload.value;
+    initializeAuthState() {
+      console.log("call here");
+      const item = JSON.parse(localStorage.getItem("auth") || "null");
+      if (!item) {
+        return { ...initialState };
       }
-      if (key === "email") {
-        state.emailError = action.payload.value;
-      }
-      if (key === "password") {
-        state.passwordError = action.payload.value;
-      }
-    },
-    setInitError(state) {
-      state.nicknameError = null;
-      state.emailError = null;
-      state.passwordError = null;
+
+      return item;
     },
   },
 });
-export const {
-  setEmail,
-  setNickname,
-  setPassword,
-  setPasswordConfirm,
-  setError,
-  setInitError,
-} = authSlice.actions;
+
+export const { setAuthState, initializeAuthState } = authSlice.actions;
 export default authSlice.reducer;

@@ -2,7 +2,7 @@
 import { login } from "@/app/api/route";
 import useInput from "@/app/hooks/useInput";
 import { checkValidEmail } from "@/lib/valid";
-import { setAuthState } from "@/modules/auth/authSliceRe";
+import { setAuthState } from "@/modules/auth/authSlice";
 import { useAppDispatch } from "@/modules/hooks/hook";
 import { AxiosError } from "axios";
 import Link from "next/link";
