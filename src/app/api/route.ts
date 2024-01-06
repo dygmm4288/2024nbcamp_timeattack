@@ -50,6 +50,6 @@ export const login = async ({
     });
     return res.data;
   } catch (err) {
-    return Promise.reject(err);
+    return Promise.reject(err as AxiosError);
   }
 };
