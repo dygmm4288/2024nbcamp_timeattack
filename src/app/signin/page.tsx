@@ -4,10 +4,11 @@ import Link from "next/link";
 
 export default function SignIn() {
   return (
-    <div>
+    <section>
+      <h2>로그인</h2>
       <SignInForm />
       <Link href='/signup'>회원가입</Link>
       <OAuthContainer />
-    </div>
+    </section>
   );
 }
