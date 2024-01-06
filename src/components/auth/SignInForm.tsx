@@ -1,6 +1,9 @@
 "use client";
 import { login } from "@/app/api/route";
+import { setAuthState } from "@/modules/auth/authSliceRe";
+import { useAppDispatch } from "@/modules/hooks/hook";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   ChangeEvent,
   Dispatch,
@@ -13,6 +16,9 @@ import Input from "./Input";
 export default function SignInForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const dispatch = useAppDispatch();
+  const router = useRouter();
 
   const handleChange =
     (setter: Dispatch<SetStateAction<string>>) =>
@@ -27,7 +33,17 @@ export default function SignInForm() {
       const res = await login({ id: email, password });
       if (res.success) {
         // TODO : 로그인 성공 시 처리 로직 구현해야 함
+        const { accessToken, avatar, nickname, userId } = res;
         console.log("로그인 성공!");
+        dispatch(
+          setAuthState({
+            accessToken,
+            avatar,
+            nickname,
+            userId,
+          }),
+        );
+        router.push("/");
         return;
       }
     } catch (err) {
