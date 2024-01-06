@@ -2,7 +2,7 @@ export function checkValidEmail(email: string) {
   return email.includes("@");
 }
 export function checkValidNickname(nickname: string) {
-  return nickname.length > 2;
+  return nickname.length > 1;
 }
 export function checkValidPassword(password: string) {
   return password.length > 7;
