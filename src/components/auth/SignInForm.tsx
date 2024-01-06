@@ -21,7 +21,6 @@ export default function SignInForm() {
     try {
       const res = await login({ id: email.value, password: password.value });
       if (res.success) {
-        // TODO : 로그인 성공 시 처리 로직 구현해야 함
         const { accessToken, avatar, nickname, userId } = res;
         dispatch(
           setAuthState({
