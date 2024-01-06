@@ -3,6 +3,7 @@ import { login } from "@/app/api/route";
 import useInput from "@/app/hooks/useInput";
 import { setAuthState } from "@/modules/auth/authSliceRe";
 import { useAppDispatch } from "@/modules/hooks/hook";
+import { AxiosError } from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent } from "react";
@@ -33,9 +34,14 @@ export default function SignInForm() {
         router.push("/");
         return;
       }
-    } catch (err) {
+    } catch (error) {
       // TODO: 에러 처리 해야 됨
-      console.error(err);
+      const err = error as AxiosError;
+      const { message } = err.response!.data as { message: string };
+
+      if (message === "존재하지 않는 유저입니다.") {
+        return;
+      }
     }
   };
 
