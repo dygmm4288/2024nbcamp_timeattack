@@ -22,7 +22,18 @@ type LoginResponse = {
 };
 const authInstance = axios.create({ baseURL: BASE_URL });
 
-export const register = async ({
+const postAxios = async <T, D>(url: string, data: T): Promise<D> => {
+  try {
+    const res = await authInstance.post(url, data);
+    return res.data;
+  } catch (err) {
+    return Promise.reject(err);
+  }
+};
+export const register = (data: RegisterParams) =>
+  postAxios<RegisterParams, RegisterResponse>("/register", data);
+
+/* export const register = async ({
   id,
   password,
   nickname,
@@ -37,7 +48,7 @@ export const register = async ({
   } catch (err) {
     return Promise.reject(err as AxiosError);
   }
-};
+}; */
 
 export const login = async ({
   id,
